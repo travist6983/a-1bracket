@@ -1,0 +1,7 @@
+.DS_Store
+*.log
+.vscode/
+.claude/
+
+# Raw Claude Design export (source reference only, not part of the built site)
+home-page-design-review/
