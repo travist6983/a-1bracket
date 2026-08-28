@@ -4,15 +4,16 @@ Marketing site for A-1 Bracket (a-1bracket.com), migrating from WordPress/GoDadd
 
 ## Status
 
-Scaffolding stage. Design is being built in Claude Design (homepage + services page done) and will be pulled in next.
+Site built: home, services overview, six service detail pages, a filterable projects gallery, about, and contact (with a math-captcha-protected form). See `worker/README.md` to finish wiring the contact form up to Resend.
 
 ## Structure
 
 - `index.html` — homepage
-- `pages/` — inner pages (e.g. services)
+- `pages/` — inner pages (services, projects, about, contact)
 - `css/` — stylesheets
 - `js/` — scripts
 - `img/` — images/assets
+- `worker/` — Cloudflare Worker source for the contact form's email backend (Resend)
 
 ## Deployment
 
@@ -21,4 +22,4 @@ Scaffolding stage. Design is being built in Claude Design (homepage + services p
 
 ## Contact form
 
-Previously SendGrid via the WordPress theme. Replacing with Resend once the form is built.
+Previously SendGrid via the WordPress theme. Replaced with Resend + a Cloudflare Worker — see `worker/README.md` for setup steps.
