@@ -11,7 +11,7 @@
   function setServicesOpen(open) {
     if (!servicesBtn || !servicesDropdown) return;
     servicesBtn.setAttribute("aria-expanded", String(open));
-    servicesDropdown.hidden = !open;
+    servicesDropdown.classList.toggle("is-open", open);
   }
 
   function setMobileOpen(open) {
@@ -24,10 +24,10 @@
   if (servicesBtn && servicesDropdown) {
     servicesBtn.addEventListener("click", function (e) {
       e.stopPropagation();
-      setServicesOpen(servicesDropdown.hidden);
+      setServicesOpen(!servicesDropdown.classList.contains("is-open"));
     });
     document.addEventListener("click", function (e) {
-      if (servicesDropdown.hidden) return;
+      if (!servicesDropdown.classList.contains("is-open")) return;
       if (header && !header.contains(e.target)) setServicesOpen(false);
     });
   }
