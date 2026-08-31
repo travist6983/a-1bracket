@@ -5,7 +5,7 @@
   if (!form) return;
 
   // TODO: replace with your deployed Cloudflare Worker URL (see worker/README.md)
-  var CONTACT_ENDPOINT = "https://REPLACE-ME.workers.dev";
+  var CONTACT_ENDPOINT = "https://a1bracket-contact.travisjterry.workers.dev/";
 
   var questionEl = form.querySelector("[data-captcha-question]");
   var answerInput = form.querySelector("[data-captcha-answer]");
