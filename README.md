@@ -4,7 +4,7 @@ Marketing site for A-1 Bracket (a-1bracket.com), migrating from WordPress/GoDadd
 
 ## Status
 
-Site built: home, services overview, six service detail pages, a filterable projects gallery, about, and contact (with a math-captcha-protected form). See `worker/README.md` to finish wiring the contact form up to Resend.
+Site built: home, services overview, six service detail pages, a filterable projects gallery, about, and contact (with a math-captcha-protected form). The contact form sends through Resend via a Cloudflare Worker — see `worker/README.md`.
 
 ## Structure
 
@@ -18,8 +18,8 @@ Site built: home, services overview, six service detail pages, a filterable proj
 ## Deployment
 
 - Testing: default GitHub Pages domain (`travist6983.github.io/a-1bracket`)
-- Production: `a-1bracket.com` — DNS stays on GoDaddy, repointed to GitHub Pages once the site is ready
+- Production: `a-1bracket.com` — DNS stays on Network Solutions (the old site is hosted at GoDaddy), repointed to GitHub Pages once the site is ready
 
 ## Contact form
 
-Previously SendGrid via the WordPress theme. Replaced with Resend + a Cloudflare Worker — see `worker/README.md` for setup steps.
+Previously SendGrid via the WordPress theme. Replaced with Resend + a Cloudflare Worker — see `worker/README.md` for how it's set up and how to redeploy the Worker.

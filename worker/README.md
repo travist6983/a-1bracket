@@ -4,46 +4,39 @@ The site is static (GitHub Pages), so it can't call Resend directly from the bro
 that would expose your Resend API key to anyone who views the page source. This Worker
 is the one small piece of server-side code that stands between the form and Resend.
 
-## 1. Resend setup
+## Current setup
 
-1. Sign up at resend.com (free tier: 3,000 emails/month, 100/day — plenty for a contact form).
-2. Create an API key: Dashboard -> API Keys -> Create API Key. Copy it, you'll need it in step 3.
-3. Verify your sending domain: Dashboard -> Domains -> Add Domain -> `a-1bracket.com`.
-   Resend gives you a few DNS records (SPF + DKIM) to add at your DNS provider (GoDaddy,
-   since that's where a-1bracket.com's DNS currently lives). Verification can take a few
-   minutes to a few hours to propagate.
-   - Until it's verified, you can test with `from: "onboarding@resend.dev"` in
-     contact-worker.js — swap it back to `website@a-1bracket.com` once verified.
+- **Worker:** `a1bracket-contact`, live at `https://a1bracket-contact.travisjterry.workers.dev/`.
+  `js/contact.js` posts the form there.
+- **Resend:** `a-1bracket.com` is verified (Sep 21, 2026), so the Worker sends from
+  `website@a-1bracket.com` to the recipients listed in `contact-worker.js`. The sending
+  address doesn't need a mailbox.
+- **DNS:** a-1bracket.com's DNS is at **Network Solutions** (ns17/ns18.worldnic.com), not
+  GoDaddy. That's where the Resend records live: `resend._domainkey` (DKIM), `send`
+  (bounce/SPF, pointing at Resend), and `_dmarc`. The root MX and SPF records belong to
+  the company's Microsoft 365 email — don't touch them for Resend.
 
-## 2. Deploy the Worker
+## Updating the Worker
 
-Easiest path is the Cloudflare dashboard (no local tooling needed):
+Pushing to GitHub does **not** update the Worker. It was deployed through the Cloudflare
+dashboard, so after changing `contact-worker.js`:
 
-1. Sign up at cloudflare.com (free) if you don't have an account.
-2. Dashboard -> Workers & Pages -> Create -> Create Worker.
-3. Give it a name (e.g. `a1bracket-contact`) and deploy the default template.
-4. Click "Edit code", delete the placeholder, and paste in the contents of
-   `worker/contact-worker.js` from this repo. Save and deploy.
-5. Go to the Worker's Settings -> Variables:
-   - Add a secret named `RESEND_API_KEY` with the API key from step 1.
-   - (Optional) Add a plain variable `ALLOWED_ORIGIN` set to `https://a-1bracket.com`
-     once the site is live on that domain, to restrict who can call the Worker.
-6. Note the Worker's URL, shown at the top of its page — something like
-   `https://a1bracket-contact.<your-subdomain>.workers.dev`.
+1. Cloudflare dashboard -> Workers & Pages -> `a1bracket-contact` -> Edit code.
+2. Replace the code with the contents of `worker/contact-worker.js` from this repo.
+3. Click Deploy.
 
-If you'd rather use the CLI: `npm install -g wrangler`, then `wrangler deploy
-worker/contact-worker.js`, and `wrangler secret put RESEND_API_KEY`.
+If you'd rather use the CLI: `npm install -g wrangler`, `wrangler login`, then
+`wrangler deploy worker/contact-worker.js --name a1bracket-contact`.
 
-## 3. Wire up the form
+## Worker settings
 
-Open `js/contact.js` and replace:
+Worker -> Settings -> Variables and Secrets:
 
-```js
-var CONTACT_ENDPOINT = "https://REPLACE-ME.workers.dev";
-```
-
-with the Worker URL from step 2.6. Commit and push — the live contact form will start
-sending real emails to info@a-1bracket.com.
+- `RESEND_API_KEY` (secret, required) — a Resend API key (Resend dashboard -> API Keys).
+- `ALLOWED_ORIGIN` (plain text, optional) — restricts which site can call the Worker.
+  Leave it unset while testing on github.io. Once a-1bracket.com points at GitHub Pages,
+  set it to `https://a-1bracket.com`; after that, the form on the github.io address will
+  stop working.
 
 ## Spam protection
 

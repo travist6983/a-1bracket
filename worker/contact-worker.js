@@ -50,10 +50,8 @@ export default {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        // TEMP: testing sender until a-1bracket.com is verified in Resend (see worker/README.md).
-        // Swap back to "A-1 Bracket Group Website <website@a-1bracket.com>" once verified.
-        // Note: onboarding@resend.dev can only deliver to the email your Resend account is signed up with.
-        from: "A-1 Bracket Group Website <onboarding@resend.dev>",
+        // Must be on a domain verified in Resend (a-1bracket.com is). No mailbox needed for this address.
+        from: "A-1 Bracket Group Website <website@a-1bracket.com>",
         to: ["info@a-1bracket.com", "travisjterry@gmail.com"],
         reply_to: email,
         subject: `New website message from ${name}`,
